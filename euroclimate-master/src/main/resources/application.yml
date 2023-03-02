@@ -1,0 +1,47 @@
+server:
+  port: 8080
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    preferIpAddress: true
+
+spring:
+  application:
+    name: post-service
+
+
+  config:
+    import: optional:configserver:http://localhost:8082
+  cloud:
+    bus:
+      enabled: true
+      refresh:
+        enabled: true
+    config:
+      label: latest
+      name: posts
+      discovery:
+        enabled: true
+        service-id: config-service
+
+
+  r2dbc:
+    url: r2dbc:postgresql://${SPRING_DATASOURCE:localhost:5432}/postgres
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:root777}
+    properties:
+      schema: posts
+  datasource:
+    driver-class-name: org.postgresql.Driver
+
+  liquibase:
+    url: jdbc:postgresql://${SPRING_DATASOURCE:localhost:5432}/postgres
+    user: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:root777}
+    change-log: classpath:db.migration/db.changelog-master.yml
+    enabled: true
+    default-schema: posts
+
