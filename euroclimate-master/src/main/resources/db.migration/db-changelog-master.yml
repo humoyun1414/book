@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: changelog/create_post_table.xml
+      relativeToChangelogFile: true
